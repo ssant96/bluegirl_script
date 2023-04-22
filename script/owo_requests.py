@@ -8,6 +8,7 @@ from pathlib import Path
 p1 = Path(__file__)
 p1 = p1.parent.parent.absolute()
 path = str(p1)
+print(path)
 
 # static Variables
 VERIFICATION_KEYWORD = "captcha"
