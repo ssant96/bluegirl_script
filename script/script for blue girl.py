@@ -1,8 +1,10 @@
-# pip install -r dependencies.txt
+# To install all the needed dependencies please run 'pip install -r dependencies.txt'
 import requests, random, time, os, pygame
+import tkinter as tk
 from dotenv import load_dotenv
 from PIL import Image
 from pathlib import Path
+from tkinter import filedialog
 
 # universalise path definition for the image
 p1 = Path(__file__)
@@ -10,17 +12,48 @@ p1 = p1.parent.parent.absolute()
 path = str(p1)
 print(path)
 
-# static Variables
-VERIFICATION_KEYWORD = "captcha"
-MESSAGE_LIMIT= 5
+# Load existing .env file or create a new one
+env_file = os.path.join(path + "/script", ".env")
+if not os.path.exists(env_file):
+    with open(env_file, "w") as f:
+        pass
 
-# .env Variables
+load_dotenv(env_file)
+
+
+# Define variables used in .env
+required_variables = ["TOKEN", "CHANNEL_URL", "BOT_TOKEN", "DM_URL"]
+
+defined_variables = set()
+with open(env_file, "r") as f:
+    for line in f:
+        if '=' in line:
+            var_name = line.split('=')[0].strip()
+            defined_variables.add(var_name)
+
+with open(env_file, "a") as f:
+    for var_name in required_variables:
+        # Check if the variable is already defined
+        if var_name not in defined_variables:
+            var_value = input(f"Enter the value for {var_name}: ")
+
+            # Store variable in .env file
+            f.write(f"{var_name}={var_value}\n")
+
+print("Variables successfully stored in .env file.")
+
+#.env Variables
 load_dotenv()
 TOKEN = os.environ.get("TOKEN")
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 CHANNEL_URL = os.environ.get("CHANNEL_URL")
 DM_URL = os.environ.get("DM_URL")
 
+# static Variables
+VERIFICATION_KEYWORD = "captcha"
+
+# ask user if bot is sending "owo"
+sendOwo = input(f"Would you like to send owo as well? (y/n)")
 
 for i in range(7):
     rangeNumber = random.randint(30,57)
@@ -42,8 +75,8 @@ for i in range(7):
         print('Seconds between each owo is:',owoIntervalNum,'s')
 
         # random time inverval times between owoh & owob
-        # owoIntervalNum2 = (random.randint(100,200))/100.0
-        # print('Seconds between each owo2 is:',owoIntervalNum2,'s')
+        owoIntervalNum2 = (random.randint(100,200))/100.0
+        print('Seconds between each owo2 is:',owoIntervalNum2,'s')
 
         header = {
             'authorization': TOKEN,
@@ -61,12 +94,12 @@ for i in range(7):
 
         r = requests.post(CHANNEL_URL, data=payload, headers=header)
 
-        ## Send "owo" only
-        #time.sleep(owoIntervalNum2)
-        # payload = {
-        #     'content': "owo"
-        # }
-        # r = requests.post(CHANNEL_URL, data=payload, headers=header)
+        if sendOwo == "y":
+            time.sleep(owoIntervalNum2)
+            payload = {
+                'content': "owo"
+            }
+            r = requests.post(CHANNEL_URL, data=payload, headers=header)
         
         # displays count number
         count += 1
