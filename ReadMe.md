@@ -35,5 +35,5 @@ The alerts are:
 4. **dependencies.txt** serves the purpose of installing all the dependencies needed for this script to run
 
 
-# REMINDER: If you are using this script, you are fully responsible for your own actions. Also, botting is not allowed
-# as per Discord and Owo policies which can potentially result in a ban. This project was done for research purposes only.
+## REMINDER: If you are using this script, you are fully responsible for your own actions. Also, botting is not allowed
+## as per Discord and Owo policies which can potentially result in a ban. This project was done for research purposes only.

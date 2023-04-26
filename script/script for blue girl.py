@@ -45,8 +45,8 @@ print("Variables successfully stored in .env file.")
 #.env Variables
 load_dotenv()
 TOKEN = os.environ.get("TOKEN")
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
 CHANNEL_URL = os.environ.get("CHANNEL_URL")
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
 DM_URL = os.environ.get("DM_URL")
 
 # static Variables
