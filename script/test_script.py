@@ -155,7 +155,7 @@ def run_script():
      
                     print_to_text_widget('     -------------------------------------------------')
                     print_to_text_widget('')         
-                    print_to_text_widget('                     PROGRAM EXIT SUCCESSFUL!              ')
+                    print_to_text_widget('                     PROGRAM EXIT SUCCESSFUL!         ')
                     print_to_text_widget('') 
                     print_to_text_widget('     -------------------------------------------------')
                     exit(0)
@@ -164,8 +164,8 @@ def run_script():
 
         # random breaks values
         breakPeriod = (random.randint(900000,1800000))/1000.0
-        breakPeriodInMinutes = breakPeriod/60
-        print_to_text_widget('I am going to take a break for',breakPeriodInMinutes, 'min')
+        # breakPeriodInMinutes = breakPeriod/60
+        # print_to_text_widget('I am going to take a break for {breakPeriodInMinutes} min')
         print_to_text_widget('Start break at:', time.ctime())
         time.sleep(breakPeriod)
         print_to_text_widget('End break at:', time.ctime())
