@@ -7,6 +7,14 @@ from pathlib import Path
 from tkinter import ttk
 from tkinter import messagebox
 
+def resource_path(relative_path):
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+
+image_file = resource_path("warning.jpg")
+beep_file = resource_path("beep.mp3")
+env_file = resource_path("script/.env")
+
 # Load .env variables
 exe_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
 # construct the path to the .env file
@@ -71,6 +79,7 @@ def run_script():
         print_to_text_widget('                    PROGRAM IS RUNNING!               ')
         print_to_text_widget('') 
         print_to_text_widget('     -------------------------------------------------')
+        print_to_text_widget(f'     I am going to run this {rangeNumber} times')
 
         count = 0
         for i in range(rangeNumber): 
@@ -163,8 +172,8 @@ def run_script():
 
         # random breaks values
         breakPeriod = (random.randint(900000,1800000))/1000.0
-        #breakPeriod = 10
-        print_to_text_widget(f'     I am going to take a break for {breakPeriod} secs')
+        breakPeriodinMinutes = breakPeriod/60
+        print_to_text_widget(f'     I am going to take a break for {breakPeriodinMinutes} secs')
         print_to_text_widget(f'     End break at: {time.ctime()}')
         print_to_text_widget('     -------------------------------------------------')
         time.sleep(breakPeriod)
