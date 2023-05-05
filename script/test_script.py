@@ -1,5 +1,5 @@
 # To install all the needed dependencies please run 'pip install -r dependencies.txt'
-import requests, random, time, os, pygame, threading, sys
+import requests, random, time, os, pygame, threading, sys, json
 import tkinter as tk
 from dotenv import load_dotenv
 from PIL import Image
@@ -7,23 +7,8 @@ from pathlib import Path
 from tkinter import ttk
 from tkinter import messagebox
 
-def resource_path(relative_path):
-    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
-    return os.path.join(base_path, relative_path)
-
-image_file = resource_path("warning.jpg")
-beep_file = resource_path("beep.mp3")
-env_file = resource_path("script/.env")
-
-# Load .env variables
-exe_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
-# construct the path to the .env file
-env_path = os.path.join(exe_dir, "script", ".env")
-env_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
-load_dotenv(env_file)
-
-# Save user given data to .env file
-def save_data():
+# Save user given data to JSON file
+def save_data_to_json():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
     script_dir = os.path.join(parent_dir, "script")
@@ -31,27 +16,55 @@ def save_data():
     if not os.path.exists(script_dir):
         os.makedirs(script_dir)
 
-    env_path = os.path.join(script_dir, ".env")
-    
-    with open(env_path, 'w') as file:
-        file.write(f"TOKEN={TOKEN.get()}\n")
-        file.write(f"CHANNEL_URL={CHANNEL_URL.get()}\n")
-        file.write(f"BOT_TOKEN={BOT_TOKEN.get()}\n")
-        file.write(f"DM_URL={DM_URL.get()}\n")
-        file.write(f"SEND_OWO={SEND_OWO.get()}\n")
-    messagebox.showinfo("Good Shit", "Data saved!")
+    json_path = os.path.join(script_dir, "data.json")
 
+    data = {
+        "TOKEN": TOKEN.get(),
+        "CHANNEL_URL": CHANNEL_URL.get(),
+        "BOT_TOKEN": BOT_TOKEN.get(),
+        "DM_URL": DM_URL.get(),
+        "SEND_OWO": SEND_OWO.get(),
+    }
+
+    with open(json_path, 'w') as file:
+        json.dump(data, file)
+
+    messagebox.showinfo("Good Shit, Data saved!")
+
+def load_data_from_json():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    script_dir = os.path.join(parent_dir, "script")
+
+    json_path = os.path.join(script_dir, "data.json")
+
+    if os.path.exists(json_path):
+        with open(json_path, 'r') as file:
+            data = json.load(file)
+    else:
+        data = {
+            "TOKEN": "",
+            "CHANNEL_URL": "",
+            "BOT_TOKEN": "",
+            "DM_URL": "",
+            "SEND_OWO": "no",
+        }
+
+    return data
+
+# --------------------Test------------------------
 def resource_path(relative_path):
-    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
-    return os.path.join(base_path, relative_path)
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
 
-image_file = resource_path("warning.jpg")
-beep_file = resource_path("beep.mp3")
+
 
 def print_to_text_widget(text):
     output_text.insert(tk.END, text + '\n')
     output_text.see(tk.END)
 
+# Main script
 def run_script():
     # universalise path definition for the image
     p1 = Path(__file__)
@@ -59,15 +72,12 @@ def run_script():
     path = str(p1)
     print(path)
 
-    # Load .env variables
-    env_file = os.path.join(path + "/script", ".env")
-    load_dotenv(env_file)
-
-    TOKEN = os.environ.get("TOKEN")
-    CHANNEL_URL = os.environ.get("CHANNEL_URL")
-    BOT_TOKEN = os.environ.get("BOT_TOKEN")
-    DM_URL = os.environ.get("DM_URL")
-    SEND_OWO = os.environ.get("SEND_OWO")
+    data = load_data_from_json()
+    TOKEN = data["TOKEN"]
+    CHANNEL_URL = data["CHANNEL_URL"]
+    BOT_TOKEN = data["BOT_TOKEN"]
+    DM_URL = data["DM_URL"]
+    SEND_OWO = data["SEND_OWO"]
 
     # static Variables
     VERIFICATION_KEYWORD = "captcha"
@@ -144,7 +154,7 @@ def run_script():
                     r = requests.post(DM_URL, data=payload, headers=header)
 
                     # shows image
-                    image = Image.open(path + "/warning.jpg")
+                    image = Image.open(resource_path("warning.jpg"))
                     image.show()
 
                     # play beep sound 
@@ -156,7 +166,7 @@ def run_script():
                             time.sleep(1)
 
                     if __name__ == "__main__":
-                        audio_file = path + "/beep.mp3"
+                        audio_file = resource_path("beep.mp3")
                         for i in range(10):
                             play_sound(audio_file)
                             time.sleep(1)
@@ -187,12 +197,14 @@ root = tk.Tk()
 root.title("OWO AUTOMATIC BOT by Spaa")
 root.geometry("600x550")
 
+data = load_data_from_json()
+
 # Variables
-TOKEN = tk.StringVar(value=os.environ.get("TOKEN", ""))
-CHANNEL_URL = tk.StringVar(value=os.environ.get("CHANNEL_URL", ""))
-BOT_TOKEN = tk.StringVar(value=os.environ.get("BOT_TOKEN", ""))
-DM_URL = tk.StringVar(value=os.environ.get("DM_URL", ""))
-SEND_OWO = tk.StringVar(value=os.environ.get("SEND_OWO", "no"))
+TOKEN = tk.StringVar(value=data["TOKEN"])
+CHANNEL_URL = tk.StringVar(value=data["CHANNEL_URL"])
+BOT_TOKEN = tk.StringVar(value=data["BOT_TOKEN"])
+DM_URL = tk.StringVar(value=data["DM_URL"])
+SEND_OWO = tk.StringVar(value=data["SEND_OWO"])
 
 # Labels
 ttk.Label(root, text="Your token:").grid(column=0, row=0, padx=5, pady=10, sticky=tk.W)
@@ -220,7 +232,7 @@ scrollbar.grid(column=2, row=8, padx=(0, 10), pady=10, sticky=tk.N+tk.S)
 output_text.config(yscrollcommand=scrollbar.set)
 
 # Save button
-ttk.Button(root, text="Save Data", command=save_data).grid(column=0, row=6, padx=65, pady=5, sticky=tk.W)
+ttk.Button(root, text="Save Data", command=save_data_to_json).grid(column=0, row=6, padx=65, pady=5, sticky=tk.W)
 ttk.Button(root, text="Run Script", command=lambda: threading.Thread(target=run_script).start()).grid(column=0, row=6, padx=263, pady=5, sticky=tk.W)
 ttk.Button(root, text="Exit", command=stop_script).grid(column=0, row=6, padx=465, pady=5, sticky=tk.W)
 
