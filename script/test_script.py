@@ -163,8 +163,9 @@ def run_script():
 
         # random breaks values
         breakPeriod = (random.randint(900000,1800000))/1000.0
-        print_to_text_widget('     I am going to take a break for {breakPeriod} secs')
-        # print_to_text_widget('End break at:', time.ctime())
+        #breakPeriod = 10
+        print_to_text_widget(f'     I am going to take a break for {breakPeriod} secs')
+        print_to_text_widget(f'     End break at: {time.ctime()}')
         print_to_text_widget('     -------------------------------------------------')
         time.sleep(breakPeriod)
 
