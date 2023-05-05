@@ -1,4 +1,5 @@
 # To install all the needed dependencies please run 'pip install -r dependencies.txt'
+# To do .exe run 'pyinstaller --noconsole --add-data "warning.jpg;." --add-data "beep.mp3;." script/test_script.py --icon=owo_girl.png'
 import requests, random, time, os, pygame, threading, sys, json
 import tkinter as tk
 from dotenv import load_dotenv
