@@ -76,15 +76,11 @@ def run_script():
         for i in range(rangeNumber): 
             # random interval times owoh & owob are sent
             intervalNum = (random.randint(1500,2500))/100.0
-            print_to_text_widget(f'     Interval number is: {intervalNum} seconds')
+            print_to_text_widget(f'     Time between each run is: {intervalNum} seconds')
 
-            # random time inverval times between owoh & owob
+            # random time inverval times between hunt and battle
             owoIntervalNum = (random.randint(100,200))/100.0
-            print_to_text_widget(f'     Seconds between each owo is: {owoIntervalNum} seconds')
-
-            # random time inverval times between owoh & owob
-            owoIntervalNum2 = (random.randint(100,200))/100.0
-            print_to_text_widget(f'     Seconds between each owo2 is: {owoIntervalNum2} seconds')
+            print_to_text_widget(f'     Time between hunt & battle is: {owoIntervalNum} seconds')
 
             header = {
                 'authorization': TOKEN,
@@ -103,6 +99,9 @@ def run_script():
             r = requests.post(CHANNEL_URL, data=payload, headers=header)
 
             if SEND_OWO == "yes":
+                # random time inverval times between battle and owo
+                owoIntervalNum2 = (random.randint(100,200))/100.0
+                print_to_text_widget(f'     Time between battle & owo is: {owoIntervalNum2} seconds')
                 time.sleep(owoIntervalNum2)
                 payload = {
                     'content': "owo"
@@ -164,15 +163,14 @@ def run_script():
 
         # random breaks values
         breakPeriod = (random.randint(900000,1800000))/1000.0
-        # breakPeriodInMinutes = breakPeriod/60
-        # print_to_text_widget('I am going to take a break for {breakPeriodInMinutes} min')
-        print_to_text_widget('Start break at:', time.ctime())
-        time.sleep(breakPeriod)
-        print_to_text_widget('End break at:', time.ctime())
+        print_to_text_widget('     I am going to take a break for {breakPeriod} secs')
+        # print_to_text_widget('End break at:', time.ctime())
         print_to_text_widget('     -------------------------------------------------')
+        time.sleep(breakPeriod)
 
 def stop_script():
     root.destroy()
+    sys.exit(0)
 
 # GUI starts here
 root = tk.Tk()
@@ -214,7 +212,7 @@ output_text.config(yscrollcommand=scrollbar.set)
 # Save button
 ttk.Button(root, text="Save Data", command=save_data).grid(column=0, row=6, padx=65, pady=5, sticky=tk.W)
 ttk.Button(root, text="Run Script", command=lambda: threading.Thread(target=run_script).start()).grid(column=0, row=6, padx=263, pady=5, sticky=tk.W)
-ttk.Button(root, text="Exit", command=lambda: threading.Thread(target=stop_script).start()).grid(column=0, row=6, padx=465, pady=5, sticky=tk.W)
+ttk.Button(root, text="Exit", command=stop_script).grid(column=0, row=6, padx=465, pady=5, sticky=tk.W)
 
 
 # Run the application
