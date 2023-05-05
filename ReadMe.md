@@ -1,8 +1,5 @@
 # This script automates a discord game that sends out a visual and audio alert when the bot asks for a captcha.  
 
-Who wants to actually send out bot commands on discord for a meaningless game that I don't even know why I keep playing?
-Well here you are sitting like a dumbass like me but hey, this script will just do the job.
-
 Little bit about the script:
 This script will ask user for discord authentication token and channel URL hunt and battle commands into a specified channel. It will also
 send out alerts whenever it sees "captcha" word in the channel so make sure to delete "captcha" in the channel before starting the script again.
@@ -19,11 +16,10 @@ The alerts are:
 - DM's your main account if triggered (finds 'captcha' in the channel)
 - Opens an image for visual alert if triggered (finds 'captcha' in the channel)
 - Plays a sound 10 times for warning if triggered (finds 'captcha' in the channel)
-
+- GUI 
+- .exe file available
 
 ## Features in progress
-- GUI
-- Executable
 - Captcha solver
 -
 
@@ -43,7 +39,7 @@ a new window that will show the channel URL and the authorization (header sectio
 *NOTE: This .env file will be edited on the script so you don't need to add anything else.*
 *If information was entered incorrectly, please delete everything in the .env file and try again*
 
-# --- This section shows a sample of what the .env should look like---
+## --- This section shows a sample of what the user input should look like---
 TOKEN = 6TyrFg4MTA4NDUwOPx0OTkx.GpbtzP.aCQyhSxVS2v0AxgqxYc0KV3wiHEwuwN2PNQAtI
 CHANNEL_URL = https://discord.com/api/v9/channels/321983247234643613/messages
 BOT_TOKEN = 94r4ODg4MTA4NDUwOPx0OTkx.GpbtzP.aCQyhSxVS2v0AxgqxYc0KV3wiHEwuwN2PNQAtI
