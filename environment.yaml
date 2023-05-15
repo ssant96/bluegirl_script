@@ -5,5 +5,6 @@ dependencies:
   - requests
   - pillow
   - pip
+  - PyQt5
   - pip:
     - pygame
