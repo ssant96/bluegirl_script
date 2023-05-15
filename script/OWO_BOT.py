@@ -1,8 +1,7 @@
 # To install all the needed dependencies please run 'pip install -r dependencies.txt'
-# To do .exe run 'pyinstaller --noconsole --add-data "warning.jpg;." --add-data "beep.mp3;." script/test_script.py --icon=owo_girl.png'
+# To do .exe run 'pyinstaller --noconsole --add-data "warning.jpg;." --add-data "beep.mp3;." script/OWO_BOT.py --icon=owo_girl.png'
 import requests, random, time, os, pygame, threading, sys, json
 import tkinter as tk
-from dotenv import load_dotenv
 from PIL import Image
 from pathlib import Path
 from tkinter import ttk
@@ -17,7 +16,7 @@ def save_data_to_json():
     if not os.path.exists(script_dir):
         os.makedirs(script_dir)
 
-    json_path = os.path.join(script_dir, "data.json")
+    json_path = os.path.join(script_dir, "userData.json")
 
     data = {
         "TOKEN": TOKEN.get(),
@@ -25,31 +24,39 @@ def save_data_to_json():
         "BOT_TOKEN": BOT_TOKEN.get(),
         "DM_URL": DM_URL.get(),
         "SEND_OWO": SEND_OWO.get(),
+        "BREAK": BREAK.get(),
     }
 
     with open(json_path, 'w') as file:
         json.dump(data, file)
 
-    messagebox.showinfo("Good Shit", "Data saved!")
+    messagebox.showinfo("Important!", "Data saved!")
 
 def load_data_from_json():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
     script_dir = os.path.join(parent_dir, "script")
 
-    json_path = os.path.join(script_dir, "data.json")
+    json_path = os.path.join(script_dir, "userData.json")
+
+    default_data = {
+        "TOKEN": "",
+        "CHANNEL_URL": "",
+        "BOT_TOKEN": "",
+        "DM_URL": "",
+        "SEND_OWO": "no",
+        "BREAK": "no",
+    }
 
     if os.path.exists(json_path):
         with open(json_path, 'r') as file:
             data = json.load(file)
+            # Add any missing keys to the loaded data
+            for key in default_data:
+                if key not in data:
+                    data[key] = default_data[key]
     else:
-        data = {
-            "TOKEN": "",
-            "CHANNEL_URL": "",
-            "BOT_TOKEN": "",
-            "DM_URL": "",
-            "SEND_OWO": "no",
-        }
+        data = default_data
 
     return data
 
@@ -77,28 +84,30 @@ def run_script():
     BOT_TOKEN = data["BOT_TOKEN"]
     DM_URL = data["DM_URL"]
     SEND_OWO = data["SEND_OWO"]
+    BREAK = data["BREAK"]
 
     # static Variables
     VERIFICATION_KEYWORD = "captcha"
+    
+    print_to_text_widget('     -------------------------------------------------')
+    print_to_text_widget('')         
+    print_to_text_widget('                    PROGRAM IS RUNNING!               ')
+    print_to_text_widget('') 
+    print_to_text_widget('     -------------------------------------------------')
 
     for i in range(7):
-        rangeNumber = random.randint(30,57)
-        print_to_text_widget('     -------------------------------------------------')
-        print_to_text_widget('')         
-        print_to_text_widget('                    PROGRAM IS RUNNING!               ')
-        print_to_text_widget('') 
-        print_to_text_widget('     -------------------------------------------------')
+        rangeNumber = random.randint(32,64)
         print_to_text_widget(f'     I am going to run this {rangeNumber} times')
 
         count = 0
         for i in range(rangeNumber): 
-            # random interval times owoh & owob are sent
-            intervalNum = (random.randint(1500,2500))/100.0
-            print_to_text_widget(f'     Time between each run is: {intervalNum} seconds')
+            # random interval times between each run
+            runInterval = (random.randint(1500,2500))/100.0
+            print_to_text_widget(f'     Time between each run is: {runInterval} seconds')
 
             # random time inverval times between hunt and battle
-            owoIntervalNum = (random.randint(100,200))/100.0
-            print_to_text_widget(f'     Time between hunt & battle is: {owoIntervalNum} seconds')
+            h_bInterval = (random.randint(100,200))/100.0
+            print_to_text_widget(f'     Time between hunt & battle is: {h_bInterval} seconds')
 
             header = {
                 'authorization': TOKEN,
@@ -108,7 +117,7 @@ def run_script():
             }
 
             r = requests.post(CHANNEL_URL, data=payload, headers=header)
-            time.sleep(owoIntervalNum)
+            time.sleep(h_bInterval)
             
             payload = {
                 'content': "owob"
@@ -118,9 +127,9 @@ def run_script():
 
             if SEND_OWO == "yes":
                 # random time inverval times between battle and owo
-                owoIntervalNum2 = (random.randint(100,200))/100.0
-                print_to_text_widget(f'     Time between battle & owo is: {owoIntervalNum2} seconds')
-                time.sleep(owoIntervalNum2)
+                b_oInterval = (random.randint(100,200))/100.0
+                print_to_text_widget(f'     Time between battle & owo is: {b_oInterval} seconds')
+                time.sleep(b_oInterval)
                 payload = {
                     'content': "owo"
                 }
@@ -176,16 +185,16 @@ def run_script():
                     print_to_text_widget('') 
                     print_to_text_widget('     -------------------------------------------------')
                     exit(0)
-            time.sleep(intervalNum)
+            time.sleep(runInterval)
 
-
-        # random breaks values
-        breakPeriod = (random.randint(900000,1800000))/1000.0
-        breakPeriodinMinutes = breakPeriod/60
-        print_to_text_widget(f'     I am going to take a break for {breakPeriodinMinutes} secs')
-        print_to_text_widget(f'     End break at: {time.ctime()}')
-        print_to_text_widget('     -------------------------------------------------')
-        time.sleep(breakPeriod)
+        if BREAK == "yes":
+            # random breaks values
+            breakPeriod = (random.randint(900000,1800000))/1000.0
+            breakPeriodinMinutes = breakPeriod/60
+            print_to_text_widget(f'     I am going to take a break for {breakPeriodinMinutes} secs')
+            print_to_text_widget(f'     End break at: {time.ctime()}')
+            print_to_text_widget('     -------------------------------------------------')
+            time.sleep(breakPeriod)
 
 def stop_script():
     root.destroy()
@@ -204,6 +213,7 @@ CHANNEL_URL = tk.StringVar(value=data["CHANNEL_URL"])
 BOT_TOKEN = tk.StringVar(value=data["BOT_TOKEN"])
 DM_URL = tk.StringVar(value=data["DM_URL"])
 SEND_OWO = tk.StringVar(value=data["SEND_OWO"])
+BREAK = tk.StringVar(value=data["BREAK"])
 
 # Labels
 ttk.Label(root, text="Your token:").grid(column=0, row=0, padx=5, pady=10, sticky=tk.W)
@@ -220,6 +230,8 @@ ttk.Entry(root, textvariable=DM_URL, width=82).grid(column=0, row=3, padx=80, pa
 # Checkboxes
 chk_box_bot_off = ttk.Checkbutton(root, text="Send Owo", variable=SEND_OWO, onvalue="yes", offvalue="no")
 chk_box_bot_off.grid(column=0, row=4, padx=5, pady=10, sticky=tk.W)
+chk_box_bot_off = ttk.Checkbutton(root, text="Break?", variable=BREAK, onvalue="yes", offvalue="no")
+chk_box_bot_off.grid(column=0, row=4, padx=100, pady=10, sticky=tk.W)
 
 # Add a text widget to the output
 output_text = tk.Text(root, wrap=tk.WORD, height=15, width=60)
