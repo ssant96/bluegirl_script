@@ -1,0 +1,9 @@
+name: owoenv
+channels:
+  - defaults
+dependencies:
+  - requests
+  - pillow
+  - pip
+  - pip:
+    - pygame
